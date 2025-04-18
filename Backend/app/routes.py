@@ -18,6 +18,6 @@ def getTodoItems():
     todos = getTodos()
     if todos is None:
         return jsonify([])
-    return jsonify([{"todokey": str(t.todokey), "description": t.tododesc, "done": t.done} for t in todos])
+    return jsonify([todo.to_dict() for todo in todos])
 
 

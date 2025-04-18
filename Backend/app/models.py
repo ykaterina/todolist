@@ -1,5 +1,7 @@
+from sqlalchemy.inspection import inspect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import func
 import uuid
 
 db = SQLAlchemy()
@@ -13,15 +15,18 @@ class Todo(db.Model):
     todouserid = db.Column(db.String(25), nullable=False)
     tododesc = db.Column(db.String(250), nullable=False)
     done = db.Column(db.Boolean, default=False)
-
-    def __init__(self, todouserid, tododesc, done=False):
-        self.todouserid = todouserid
-        self.tododesc = tododesc
-        self.done = done
+    createdttm = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updatedttm = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return '<todokey {}>'.format(self.todokey)
 
+    def to_dict(self):
+        return {
+            c.key: getattr(self, c.key)
+            for c in inspect(self).mapper.column_attrs
+        }
+    
     @staticmethod
     def addItem(item):
         print(f"Received item: {item} - Type: {type(item)}")  # Debugging
@@ -29,8 +34,7 @@ class Todo(db.Model):
         try:
           item_dict = Todo(
                todouserid = item["todouserid"],
-               tododesc = item["tododesc"],
-               done = item.get("done", False)
+               tododesc = item["tododesc"]
           )
           db.session.add(item_dict)
           db.session.commit()
