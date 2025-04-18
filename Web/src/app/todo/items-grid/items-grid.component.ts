@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
-import type { ColDef, GridApi } from 'ag-grid-community';
+import type { ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { TodoService } from '../todo.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -15,31 +15,31 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class ItemsGridComponent {
   todos = [];
-  private gridApi: any;
+  private gridApi!: GridApi;
 
-  constructor(private todoService: TodoService) {}
+  constructor(
+    private todoService: TodoService
+  ) {}
   rowData = []
-  
-  onGridReady(params: any) {
-    this.gridApi = params.api;
-  }
   
   colDefs: ColDef[] = [
     { 
-      headerName: "",
-      field: "checkbox",
-      width: 100
+      headerName: "Status",
+      field: "done",
+      cellDataType: 'boolean'
     },
     { 
       headerName: "To Do",
-      cellDataType: "String",
-      field: "description",
+      field: "tododesc",
       width: 500
     },
-    { 
-      headerName: "Status",
-      cellDataType: "String",
-      field: "status" 
+    {
+      headerName: "Created Date",
+      field: "createdttm",
+    },
+    {
+      headerName: "Last Updated Date",
+      field: "updatedttm",
     },
     { 
       headerName: "Action",
@@ -47,11 +47,16 @@ export class ItemsGridComponent {
     }
   ];
 
+  gridOptions: GridOptions = {
+    columnDefs: this.colDefs,
+    rowData: this.rowData,
+  };
+
   ngOnInit() {
     this.todoService.getTodo().subscribe({
       next: (data) => {
-        this.todos = data;
-        console.log('Fetched todos:', this.todos);
+        this.rowData = data;
+        console.log('Fetched todos:', data);
       },
       error: (err) => {
         console.error('Failed to fetch todos:', err);

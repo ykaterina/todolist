@@ -1,12 +1,12 @@
 <div style="display: flex; justify-content: center;">
-     <div class="ag-theme-material" style="min-height: 100px; width: 80%;">
+     <div class="ag-theme-material" style="min-height: 500px; width: 80%;">
           <ag-grid-angular
-          [rowData]="rowData"
+          [gridOptions]="gridOptions"
           [columnDefs]="colDefs"
+          [rowData]="rowData"
           class="ag-theme-alpine"
-          style="width: 100%; height: 100%;">
-          (gridReady)="onGridReady($event)"> 
-          [overlayNoRowsTemplate]="noRowsTemplate">
+          style="width: 100%; height: 100%;"
+          >
           </ag-grid-angular>
    </div>
 </div>
