@@ -1,0 +1,70 @@
+body {
+     font-family: sans-serif;
+}
+
+.main {
+     max-width: 75%;
+     width: 75%;
+     margin: 2rem auto;
+     padding: 1rem;
+     text-align: center;
+     box-shadow:
+       0 2px px 0 rgb(0 0 0 / 20%),
+       0 2.5rem 2rem 0 rgb(0 0 0 / 10%);
+       font-family: sans-serif;
+   }
+   
+   @media screen and (min-width: 600px) {
+     .main {
+       width: 70%;
+     }
+   }
+   
+.add-new-item {
+     min-width: 150px;
+     width: 100%;
+     align-items: center;
+
+     input {
+         margin: auto;
+         font-weight: bold;
+         font-size: large;
+         padding: 20px 20px;
+         margin: 10px;
+         width: 80%;
+         height: 2.5rem;
+         padding: 1rem;
+         border: 1px solid #000;
+         border-radius: 10px;
+         font-size: 1rem;
+         text-align: center;
+     }
+}
+
+   
+
+   .btn-wrapper {
+     margin-bottom: 1rem;
+   }
+   
+   .btn-menu {
+     flex-basis: 32%;
+   }
+   
+   ul {
+     padding-inline-start: 0;
+   }
+   
+   ul li {
+     list-style: none;
+   }
+
+p {
+     text-align: right;
+}
+
+.btn-wrapper {
+     display: flex;
+     flex-wrap: nowrap;
+     justify-content: space-between;
+}
