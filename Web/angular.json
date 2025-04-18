@@ -32,7 +32,9 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ag-grid-community/styles/ag-grid.scss",
+              "node_modules/ag-grid-community/styles/ag-theme-material.scss"
             ],
             "scripts": []
           },
@@ -85,10 +87,8 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.png",
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"

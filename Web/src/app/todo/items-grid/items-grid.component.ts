@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, GridApi } from 'ag-grid-community';
 import { TodoService } from '../todo.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -15,20 +15,36 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class ItemsGridComponent {
   todos = [];
+  private gridApi: any;
 
   constructor(private todoService: TodoService) {}
-
-  rowData = [
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-  ];
-
+  rowData = []
+  
+  onGridReady(params: any) {
+    this.gridApi = params.api;
+  }
+  
   colDefs: ColDef[] = [
-    { field: "checkbox" },
-    { field: "To Do" },
-    { field: "Status" },
-    { field: "Edit" }
+    { 
+      headerName: "",
+      field: "checkbox",
+      width: 100
+    },
+    { 
+      headerName: "To Do",
+      cellDataType: "String",
+      field: "description",
+      width: 500
+    },
+    { 
+      headerName: "Status",
+      cellDataType: "String",
+      field: "status" 
+    },
+    { 
+      headerName: "Action",
+      field: "action" 
+    }
   ];
 
   ngOnInit() {
