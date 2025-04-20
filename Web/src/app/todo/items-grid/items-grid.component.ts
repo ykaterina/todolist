@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
+import { AgGridAngular } from 'ag-grid-angular';
 import type { ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { TodoService } from '../todo.service';
+import {
+  ColumnMenuModule,
+  ColumnsToolPanelModule,
+  ContextMenuModule,
+  RowGroupingModule,
+} from "ag-grid-enterprise";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -26,7 +32,13 @@ export class ItemsGridComponent {
     { 
       headerName: "Status",
       field: "done",
-      cellDataType: 'boolean'
+      cellDataType: 'boolean',
+      width: 100,
+      valueGetter: function(params) {
+        return params.data.done ? true : false
+      },
+      editable: true,
+      cellClass: 'status-checkbox'
     },
     { 
       headerName: "To Do",
@@ -36,6 +48,7 @@ export class ItemsGridComponent {
     {
       headerName: "Created Date",
       field: "createdttm",
+      hide: true
     },
     {
       headerName: "Last Updated Date",
@@ -48,8 +61,13 @@ export class ItemsGridComponent {
   ];
 
   gridOptions: GridOptions = {
-    columnDefs: this.colDefs,
-    rowData: this.rowData,
+    autoSizeStrategy: {type: 'fitGridWidth'},
+    defaultColDef: {
+      enableRowGroup: true,
+      menuTabs: ['filterMenuTab', 'generalMenuTab', 'columnsMenuTab'],
+      sortable: true,
+      filter: true,
+    },
   };
 
   ngOnInit() {
