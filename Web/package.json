@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@mui/icons-material": "^7.0.2",
     "ag-grid-angular": "^33.2.4",
     "ag-grid-community": "^33.2.4",
     "ag-grid-enterprise": "^33.2.4",

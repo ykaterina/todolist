@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@include mat.core();
+@include mat.all-component-themes(mat.define-light-theme((
+  color: (
+    primary: mat.define-palette(mat.$indigo-palette),
+    accent: mat.define-palette(mat.$pink-palette),
+  )
+)));
+
+.ag-header-cell-filter-button {
+     opacity: 0;
+     transition: opacity 0.3s;
+}
+
+.ag-header-cell:hover .ag-header-cell-filter-button {
+     opacity: 1;
+}

@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { AllCommunityModule, ModuleRegistry, themeMaterial, ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
-import type { ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { TodoService } from '../todo.service';
-import {
-  ColumnMenuModule,
-  ColumnsToolPanelModule,
-  ContextMenuModule,
-  RowGroupingModule,
-} from "ag-grid-enterprise";
+import { ActionRendererComponent } from './CellRenderer/action-renderer/action-renderer.component'
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -20,52 +14,22 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   styleUrl: './items-grid.component.scss'
 })
 export class ItemsGridComponent {
-  todos = [];
-  private gridApi!: GridApi;
 
   constructor(
     private todoService: TodoService
-  ) {}
+  ) { }
+
+  public theme = themeMaterial.withParams({
+    wrapperBorder: true,
+    headerRowBorder: true,
+  });
+  private gridApi!: GridApi;
+
   rowData = []
-  
-  colDefs: ColDef[] = [
-    { 
-      headerName: "Status",
-      field: "done",
-      cellDataType: 'boolean',
-      width: 100,
-      valueGetter: function(params) {
-        return params.data.done ? true : false
-      },
-      editable: true,
-      cellClass: 'status-checkbox'
-    },
-    { 
-      headerName: "To Do",
-      field: "tododesc",
-      width: 500
-    },
-    {
-      headerName: "Created Date",
-      field: "createdttm",
-      hide: true
-    },
-    {
-      headerName: "Last Updated Date",
-      field: "updatedttm",
-    },
-    { 
-      headerName: "Action",
-      field: "action" 
-    }
-  ];
 
   gridOptions: GridOptions = {
-    autoSizeStrategy: {type: 'fitGridWidth'},
+    autoSizeStrategy: { type: 'fitGridWidth' },
     defaultColDef: {
-      enableRowGroup: true,
-      menuTabs: ['filterMenuTab', 'generalMenuTab', 'columnsMenuTab'],
-      sortable: true,
       filter: true,
     },
   };
@@ -81,4 +45,38 @@ export class ItemsGridComponent {
       }
     })
   }
+
+  colDefs: ColDef[] = [
+    {
+      headerName: "Status",
+      field: "done",
+      cellDataType: 'boolean',
+      width: 120,
+      valueGetter: function (params) {
+        return params.data.done ? true : false
+      },
+      cellRenderer: 'agCheckboxCellRenderer',
+      editable: true,
+      cellClass: 'status-checkbox'
+    },
+    {
+      headerName: "To Do",
+      field: "tododesc",
+      width: 500
+    },
+    {
+      headerName: "Created Date",
+      field: "createdttm",
+      hide: true
+    },
+    {
+      headerName: "Last Updated Date",
+      field: "updatedttm",
+    },
+    {
+      headerName: "Action",
+      field: "action",
+      cellRenderer: ActionRendererComponent
+    }
+  ];
 }
