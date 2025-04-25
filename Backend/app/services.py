@@ -9,3 +9,12 @@ def addItem(item):
 
 def getTodos():
      return db.session.query(Todo).all()
+
+def deleteTodo(todokey):
+     todo = Todo.query.get(todokey)
+     print('deleteTodo', todo)
+     if not todo:
+          return None
+     db.session.delete(todo)
+     db.session.commit()
+     return todo
