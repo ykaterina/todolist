@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { TodoService } from './todo.service';
 import { ItemsGridComponent } from './items-grid/items-grid.component'
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 // import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -15,23 +16,27 @@ import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 export class TodoComponent {
   constructor(
-    private service: TodoService,
+    private todoService: TodoService,
+    private grid: ItemsGridComponent
   ){}
-
+  
   description = String;
   // todoInput =  new FormControl('',
   //   Validators.maxLength(250)
   // );
-  
-
+    
   addItem(description: string) {
     console.log(description)
     
     if (!description) return;
     let todo = { 'description': description }
-    this.service.addTodo(todo).subscribe(
+    this.todoService.addTodo(todo).subscribe(
       (response) => {
         console.log(response)
+        this.todoService.getTodo().subscribe(updatedData => {
+          console.log('Updated todo list:', updatedData);
+          this.grid.rowDataSubject.next(updatedData);
+        });
       },
       (error) => {
         console.log(error)

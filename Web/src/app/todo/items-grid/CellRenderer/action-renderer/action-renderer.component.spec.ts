@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActionRendererComponentComponent } from './action-renderer.component';
+import { ActionRendererComponent } from './action-renderer.component';
 
 describe('ActionRendererComponentComponent', () => {
-  let component: ActionRendererComponentComponent;
-  let fixture: ComponentFixture<ActionRendererComponentComponent>;
+  let component: ActionRendererComponent;
+  let fixture: ComponentFixture<ActionRendererComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActionRendererComponentComponent]
+      imports: [ActionRendererComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(ActionRendererComponentComponent);
+    fixture = TestBed.createComponent(ActionRendererComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

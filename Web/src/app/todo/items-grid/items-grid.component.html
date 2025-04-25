@@ -3,7 +3,7 @@
      [theme]="theme"
      [gridOptions]="gridOptions"
      [columnDefs]="colDefs"
-     [rowData]="rowData"
+     [rowData]="rowData$ | async"
      class="ag-theme-material"
      style="width: 80%; height: 80%;"
      >

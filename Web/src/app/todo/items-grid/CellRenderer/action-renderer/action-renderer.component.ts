@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { TodoService } from '../../../todo.service';
 
 import {
   MatDialog,
@@ -18,18 +17,18 @@ import {
   imports: [ MatIconModule ],
   templateUrl: './action-renderer.component.html',
   styleUrl: './action-renderer.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActionRendererComponent implements ICellRendererAngularComp {
   private params: any;
+  actionEvent!: (key: string) => void;
+  
   constructor(
-      private todoService: TodoService,
       private dialog: MatDialog,
-      private cdr: ChangeDetectorRef,
     ) { }
 
   agInit(params: any): void {
     this.params = params;
+    this.actionEvent = params.actionEvent;
   }
 
   editTodo(): void {
@@ -40,8 +39,7 @@ export class ActionRendererComponent implements ICellRendererAngularComp {
     const dialogRef = this.dialog.open(ConfirmDeleteDialog);
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.todoService.deleteTodo(this.params.data.todokey);
-        this.cdr.detectChanges();
+        this.actionEvent(this.params.data.todokey);
       }
     });
   }

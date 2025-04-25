@@ -1,22 +1,26 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AllCommunityModule, ModuleRegistry, themeMaterial, ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { TodoService } from '../todo.service';
 import { ActionRendererComponent } from './CellRenderer/action-renderer/action-renderer.component'
+import { BehaviorSubject, catchError, Observable, of } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
   selector: 'app-items-grid',
   standalone: true,
-  imports: [AgGridAngular],
+  imports: [AgGridAngular, CommonModule],
   templateUrl: './items-grid.component.html',
-  styleUrl: './items-grid.component.scss'
+  styleUrl: './items-grid.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemsGridComponent {
 
   constructor(
-    private todoService: TodoService
+    private todoService: TodoService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   public theme = themeMaterial.withParams({
@@ -24,9 +28,10 @@ export class ItemsGridComponent {
     headerRowBorder: true,
   });
   private gridApi!: GridApi;
-
-  rowData = []
-
+  rowDataSubject = new BehaviorSubject<any[]>([]);
+  rowData$ = this.rowDataSubject.asObservable();
+  
+  
   gridOptions: GridOptions = {
     autoSizeStrategy: { type: 'fitGridWidth' },
     defaultColDef: {
@@ -34,16 +39,26 @@ export class ItemsGridComponent {
     },
   };
 
+  deleteItem(todokey: string): void {
+    this.todoService.deleteTodo(todokey)
+      .pipe(catchError(error => {
+        console.error('Error deleting todo:', error);
+        return of(null);
+        })
+      )
+      .subscribe(response => {
+        console.log('Deleted todo:', response);
+        
+        this.todoService.getTodo().subscribe(updatedData => {
+          console.log('Updated todo list:', updatedData);
+          this.rowDataSubject.next(updatedData);
+        });
+      });
+    this.cdr.detectChanges();
+  }
+
   ngOnInit() {
-    this.todoService.getTodo().subscribe({
-      next: (data) => {
-        this.rowData = data;
-        console.log('Fetched todos:', data);
-      },
-      error: (err) => {
-        console.error('Failed to fetch todos:', err);
-      }
-    })
+    this.rowData$ = this.todoService.getTodo();
   }
 
   colDefs: ColDef[] = [
@@ -76,7 +91,10 @@ export class ItemsGridComponent {
     {
       headerName: "Action",
       field: "action",
-      cellRenderer: ActionRendererComponent
+      cellRenderer: ActionRendererComponent,
+      cellRendererParams: {
+        actionEvent: this.deleteItem.bind(this)
+      }
     }
   ];
 }
