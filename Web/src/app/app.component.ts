@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';  // <-- Import this module
-
 
 @Component({
   standalone: true,
