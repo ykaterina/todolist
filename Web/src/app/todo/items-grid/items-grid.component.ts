@@ -95,7 +95,8 @@ export class ItemsGridComponent {
       },
       cellRenderer: 'agCheckboxCellRenderer',
       editable: true,
-      cellClass: 'status-checkbox'
+      cellClass: 'status-checkbox',
+      sort: 'asc'
     },
     {
       headerName: "To Do",
@@ -106,11 +107,13 @@ export class ItemsGridComponent {
     {
       headerName: "Created Date",
       field: "createdttm",
-      hide: true
+      hide: true,
+      sort: 'asc'
     },
     {
       headerName: "Last Updated Date",
       field: "updatedttm",
+      sort: 'asc'
     },
     {
       headerName: "Action",

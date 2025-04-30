@@ -19,4 +19,8 @@
 ::ng-deep .ag-header-cell-menu-button {
      display: block !important;
    }
+
+::ng-deep .ag-header-cell-label .ag-sort-indicator-container {
+     display: none !important;
+   }
    
