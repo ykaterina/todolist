@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
@@ -24,15 +24,11 @@ export class ActionRendererComponent implements ICellRendererAngularComp {
   
   constructor(
       private dialog: MatDialog,
-    ) { }
+  ) { }
 
   agInit(params: any): void {
     this.params = params;
     this.actionEvent = params.actionEvent;
-  }
-
-  editTodo(): void {
-    
   }
 
   confirmDelete(): void {

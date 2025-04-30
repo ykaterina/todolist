@@ -24,8 +24,6 @@ export class ItemsGridComponent {
     private todoService: TodoService,
   ) { }
 
-  
-
   private gridApi!: GridApi;
 
   gridOptions: GridOptions = {
@@ -49,10 +47,39 @@ export class ItemsGridComponent {
 
   deleteItem(todokey: string): void {
     this.todoService.deleteTodo(todokey)
-      .subscribe(response => {
-        console.log('Deleted todo:', response);
-        this.setGridData();
+      .subscribe({ 
+        next: () => {
+          this.setGridData();
+        },
+        error: (error) => {
+          console.error(error);
+        }
       });
+  }
+
+  onCellValueChanged(event: any): void {
+    const field = event.colDef.field;
+
+    let upd: { tododesc?: string, done?: boolean, updatedttm: Date } = {
+      updatedttm: new Date()
+    };
+
+    if (field ==='tododesc')
+      upd.tododesc = event.data.tododesc
+    else if (field === 'done')
+      upd.done = event.data.done
+    else
+      return
+
+    this.todoService.updateTodo(event.data.todokey, upd)
+      .subscribe({
+        next: () => {
+          this.setGridData();
+        },
+        error: (error) => {
+          console.error(error);
+        }
+    });
   }
 
   ngOnInit(){}
@@ -73,7 +100,8 @@ export class ItemsGridComponent {
     {
       headerName: "To Do",
       field: "tododesc",
-      width: 500
+      width: 500,
+      editable: true, 
     },
     {
       headerName: "Created Date",

@@ -18,3 +18,17 @@ def deleteTodo(todokey):
      db.session.delete(todo)
      db.session.commit()
      return todo
+
+def updateTodo(todokey, data):
+     todo = Todo.query.get(todokey)
+     if not todo:
+          return None
+     if 'tododesc' in data:
+          todo.tododesc = data['tododesc']
+     elif 'done' in data:
+          todo.done = data['done']
+     
+     todo.updatedttm = data['updatedttm']
+
+     db.session.commit()
+     return todo

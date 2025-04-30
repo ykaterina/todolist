@@ -23,4 +23,8 @@ export class TodoService {
   deleteTodo(todokey: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/deleteTodoItem/${todokey}`)
   }
+
+  updateTodo(todokey: string, updatedTodo: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/updateTodoItem/${todokey}`, updatedTodo)
+  }
 }
