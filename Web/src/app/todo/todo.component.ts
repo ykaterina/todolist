@@ -33,4 +33,8 @@ export class TodoComponent {
       }
     })
   }
+
+  onResetFilters(): void {
+    this.grid.resetFilters();
+  }
 }

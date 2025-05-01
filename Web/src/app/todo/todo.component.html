@@ -6,15 +6,8 @@
        <input #newItem (keyup.enter)="addItem(newItem.value); newItem.value = ''" class="lg-text-input"
          id="addItemInput" maxlength="250"/>
      </div>
-     <!-- <div *ngIf="todoInput.invalid && todoInput.touched" class="error">
-      Input cannot exceed 250 characters -->
-     <p>
-          
-       <!-- <mat-button-toggle-group name="filterToDo" aria-label="Filter" (change)="onFilterChange($event.value)">
-         <mat-button-toggle *ngFor="let f of filters" [value]="f"> {{f}}</mat-button-toggle>
-   
-       </mat-button-toggle-group> -->
-     </p>
+
 </div>
 <app-items-grid></app-items-grid>
+<button (click)="onResetFilters()">Reset Filters</button>
 

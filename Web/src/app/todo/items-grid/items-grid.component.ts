@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
 import { AllCommunityModule, ModuleRegistry, themeMaterial, ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { TodoService } from '../todo.service';
@@ -27,15 +27,22 @@ export class ItemsGridComponent {
   private gridApi!: GridApi;
 
   gridOptions: GridOptions = {
-    autoSizeStrategy: { type: 'fitGridWidth' },
     defaultColDef: {
       filter: true,
     },
-    rowData: []
+    rowData: [],
+    stopEditingWhenCellsLoseFocus: true,
   };
 
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit();
+    }
+}
   onGridReady(params: any): void {
     this.gridApi = params.api;
+    this.gridApi.sizeColumnsToFit();
     this.setGridData();
   }
 
@@ -64,10 +71,16 @@ export class ItemsGridComponent {
       updatedttm: new Date()
     };
 
-    if (field ==='tododesc')
-      upd.tododesc = event.data.tododesc
-    else if (field === 'done')
+    console.log(event)
+    if (field ==='tododesc'){
+      if(event.newValue)
+        upd.tododesc = event.data.tododesc
+      else
+        event.node.setDataValue(event.colDef.field, event.oldValue);
+    }
+    else if (field === 'done') {
       upd.done = event.data.done
+    }
     else
       return
 
@@ -82,6 +95,10 @@ export class ItemsGridComponent {
     });
   }
 
+  resetFilters(): void {
+    this.gridApi.setFilterModel(null);
+  }
+  
   ngOnInit(){}
 
   colDefs: ColDef[] = [
@@ -89,20 +106,19 @@ export class ItemsGridComponent {
       headerName: "Status",
       field: "done",
       cellDataType: 'boolean',
-      width: 120,
-      valueGetter: function (params) {
-        return params.data.done ? true : false
-      },
+      width: 120, 
       cellRenderer: 'agCheckboxCellRenderer',
       editable: true,
       cellClass: 'status-checkbox',
-      sort: 'asc'
+      sort: 'asc',
+      filter: 'agSetColumnFilter'
     },
     {
       headerName: "To Do",
       field: "tododesc",
       width: 500,
       editable: true, 
+      filter: 'agTextColumnFilter',
     },
     {
       headerName: "Created Date",
@@ -113,7 +129,8 @@ export class ItemsGridComponent {
     {
       headerName: "Last Updated Date",
       field: "updatedttm",
-      sort: 'asc'
+      sort: 'asc',
+      filter: 'agDateColumnFilter',
     },
     {
       headerName: "Action",
@@ -121,7 +138,8 @@ export class ItemsGridComponent {
       cellRenderer: ActionRendererComponent,
       cellRendererParams: {
         actionEvent: this.deleteItem.bind(this)
-      }
+      },
+      suppressHeaderFilterButton: true
     }
   ];
 }
