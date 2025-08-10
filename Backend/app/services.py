@@ -8,7 +8,9 @@ def addItem(item):
      Todo.addItem(todoitem)   
 
 def getTodos():
-     return db.session.query(Todo).all()
+     return db.session.query(Todo).order_by(
+               Todo.done.asc(),Todo.updatedttm.desc()
+          ).all()
 
 def deleteTodo(todokey):
      todo = Todo.query.get(todokey)
