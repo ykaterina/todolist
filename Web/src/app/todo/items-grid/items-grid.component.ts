@@ -4,6 +4,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { TodoService } from '../todo.service';
 import { ActionRendererComponent } from './CellRenderer/action-renderer/action-renderer.component'
 import { CommonModule } from '@angular/common';
+import moment from 'moment';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -29,6 +30,7 @@ export class ItemsGridComponent {
   gridOptions: GridOptions = {
     defaultColDef: {
       filter: true,
+      sortable: true,
     },
     rowData: [],
     stopEditingWhenCellsLoseFocus: true,
@@ -71,7 +73,6 @@ export class ItemsGridComponent {
       updatedttm: new Date()
     };
 
-    console.log(event)
     if (field ==='tododesc'){
       if(event.newValue)
         upd.tododesc = event.data.tododesc
@@ -97,6 +98,7 @@ export class ItemsGridComponent {
 
   resetFilters(): void {
     this.gridApi.setFilterModel(null);
+    this.gridApi.applyColumnState({defaultState: {sort: null}});
   }
   
   ngOnInit(){}
@@ -106,31 +108,46 @@ export class ItemsGridComponent {
       headerName: "Status",
       field: "done",
       cellDataType: 'boolean',
-      width: 120, 
+      minWidth: 150, 
       cellRenderer: 'agCheckboxCellRenderer',
       editable: true,
-      cellClass: 'status-checkbox',
-      sort: 'asc',
-      filter: 'agSetColumnFilter'
+      headerClass: 'default-sort',
+      cellClass: 'status-checkbox'
     },
     {
       headerName: "To Do",
       field: "tododesc",
-      width: 500,
+      minWidth: 500,
       editable: true, 
       filter: 'agTextColumnFilter',
     },
     {
       headerName: "Created Date",
       field: "createdttm",
-      hide: true,
-      sort: 'asc'
+      cellDataType: 'date',
+      valueGetter: params => { 
+        return params.data.createdttm ? moment(params.data.createdttm) : null; 
+      },
+      valueFormatter: dateFormatter,
+      filter: 'agDateColumnFilter',
+      comparator: (date1: Date, date2: Date) => {
+        if (!date1 || !date2) return 0;
+        return moment(date1).diff(moment(date2));
+      }
     },
     {
       headerName: "Last Updated Date",
       field: "updatedttm",
-      sort: 'asc',
-      filter: 'agDateColumnFilter',
+      cellDataType: 'date',
+      valueGetter: params => {
+        return params.data.updatedttm ? new Date(params.data.updatedttm) : null 
+      },
+      valueFormatter: dateFormatter,
+      filter: true,
+      comparator: (date1: Date, date2: Date) => {
+        if (!date1 || !date2) return 0;
+        return moment(date1).diff(moment(date2));
+      }
     },
     {
       headerName: "Action",
@@ -142,4 +159,9 @@ export class ItemsGridComponent {
       suppressHeaderFilterButton: true
     }
   ];
+}
+
+const dateFormatter = (params: any) => {
+  if (!params.value) return '';
+  return moment(params.value).format('DD-MMM-YYYY HH:mm:ss');
 }

@@ -1,11 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { TodoService } from './todo.service';
 import { ItemsGridComponent } from './items-grid/items-grid.component'
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-todo',
   standalone: true,
-  imports: [ItemsGridComponent],
+  imports: [ItemsGridComponent, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule],
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss']
 })
@@ -18,14 +22,11 @@ export class TodoComponent {
   @ViewChild(ItemsGridComponent) grid!: ItemsGridComponent;
   description = String;
     
-  addItem(description: string) {
-    console.log(description)
-    
+  addItem(description: string) {    
     if (!description) return;
     let todo = { 'description': description }
     this.todoService.addTodo(todo).subscribe({
       next: (response) => {
-        console.log(response)
         this.grid.setGridData();
       },
       error: (error) => {

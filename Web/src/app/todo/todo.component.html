@@ -1,13 +1,22 @@
-<div class='main'>
+<div class="main">
      <h1>TO DO</h1>
    
      <div class="add-new-item">
-       <span>What would you like to do today?</span>
-       <input #newItem (keyup.enter)="addItem(newItem.value); newItem.value = ''" class="lg-text-input"
-         id="addItemInput" maxlength="250"/>
+      <span>What would you like to do today?</span>
+      <mat-form-field appearance="outline" style="width:100%;" color="accent">
+        <mat-label>Add a new item</mat-label>
+        <input matInput #newItem
+              (keyup.enter)="addItem(newItem.value); newItem.value = ''"
+              class="lg-text-input"
+              id="addItemInput"
+              maxlength="200" />
+        <mat-icon matSuffix style="cursor:pointer;" (click)="addItem(newItem.value); newItem.value = ''">add</mat-icon>
+      </mat-form-field>
      </div>
 
 </div>
-<app-items-grid></app-items-grid>
-<button (click)="onResetFilters()">Reset Filters</button>
+<div class="reset">
+  <button mat-raised-button color="primary" id="reset-btn" (click)="onResetFilters()">Reset Filters</button>
+</div>
 
+<app-items-grid></app-items-grid>
