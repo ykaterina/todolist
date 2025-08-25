@@ -3,7 +3,8 @@ from .models import Todo,db
 def addItem(item):
      todoitem = {
           "todouserid": "todouser",
-          "tododesc": item['description']
+          "tododesc": item['description'],
+          "createdttm": item['createdttm']
      }
      Todo.addItem(todoitem)   
 

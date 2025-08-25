@@ -33,8 +33,9 @@ class Todo(db.Model):
      
         try:
           item_dict = Todo(
-               todouserid = item["todouserid"],
-               tododesc = item["tododesc"]
+                todouserid = item["todouserid"],
+                tododesc = item["tododesc"],
+                createdttm = item["createdttm"]
           )
           db.session.add(item_dict)
           db.session.commit()
