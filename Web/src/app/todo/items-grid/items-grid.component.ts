@@ -108,7 +108,7 @@ export class ItemsGridComponent {
       headerName: "Status",
       field: "done",
       cellDataType: 'boolean',
-      minWidth: 150, 
+      minWidth: 120, 
       cellRenderer: 'agCheckboxCellRenderer',
       editable: true,
       headerClass: 'default-sort',
@@ -117,19 +117,22 @@ export class ItemsGridComponent {
     {
       headerName: "To Do",
       field: "tododesc",
-      minWidth: 500,
+      minWidth: 340,
       editable: true, 
       filter: 'agTextColumnFilter',
+      cellStyle: { textAlign: 'left' }
     },
     {
       headerName: "Created Date",
       field: "createdttm",
+      minWidth: 150,
       cellDataType: 'date',
+      filter: 'agDateColumnFilter',
+      filterParams: { comparator: dateOnlyComparator },
       valueGetter: params => { 
         return params.data.createdttm ? moment(params.data.createdttm) : null; 
       },
       valueFormatter: dateFormatter,
-      filter: 'agDateColumnFilter',
       comparator: (date1: Date, date2: Date) => {
         if (!date1 || !date2) return 0;
         return moment(date1).diff(moment(date2));
@@ -138,12 +141,14 @@ export class ItemsGridComponent {
     {
       headerName: "Last Updated Date",
       field: "updatedttm",
+      minWidth: 150,
       cellDataType: 'date',
       valueGetter: params => {
         return params.data.updatedttm ? new Date(params.data.updatedttm) : null 
       },
       valueFormatter: dateFormatter,
-      filter: true,
+      filter: 'agDateColumnFilter',
+      filterParams: { comparator: dateOnlyComparator },
       comparator: (date1: Date, date2: Date) => {
         if (!date1 || !date2) return 0;
         return moment(date1).diff(moment(date2));
@@ -152,6 +157,7 @@ export class ItemsGridComponent {
     {
       headerName: "Action",
       field: "action",
+      minWidth: 100,
       cellRenderer: ActionRendererComponent,
       cellRendererParams: {
         actionEvent: this.deleteItem.bind(this)
@@ -163,5 +169,16 @@ export class ItemsGridComponent {
 
 const dateFormatter = (params: any) => {
   if (!params.value) return '';
-  return moment(params.value).format('DD-MMM-YYYY HH:mm:ss');
+  return moment(params.value).format('DD-MMM-YYYY');
 }
+
+const dateOnlyComparator = (filterDate: Date, cellValue: any): number => {
+  if (!cellValue) return -1;
+
+  const cellDateStr = new Date(cellValue).toDateString();
+  const filterDateStr = filterDate.toDateString();
+
+  if (cellDateStr > filterDateStr) return -1;
+  if (cellDateStr < filterDateStr) return 1;
+  return 0;
+};

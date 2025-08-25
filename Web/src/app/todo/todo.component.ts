@@ -24,7 +24,10 @@ export class TodoComponent {
     
   addItem(description: string) {    
     if (!description) return;
-    let todo = { 'description': description }
+    let todo = { 
+      'description': description,
+      'createdttm': new Date(),
+     }
     this.todoService.addTodo(todo).subscribe({
       next: (response) => {
         this.grid.setGridData();

@@ -1,0 +1,21 @@
+
+@use '@angular/material' as mat;
+@use '../../../../../styles.scss' as theme;
+
+.action-cell {
+  display: flex;
+  justify-content: center; // change to flex-start or flex-end if needed
+  align-items: center;
+  height: 100%;
+}
+
+.delete-icon {
+  cursor: pointer;
+  color: mat.get-color-from-palette(theme.$primary); // optional: red color
+  transition: mat.get-color-from-palette(theme.$accent) 0.2s;
+
+  &:hover {
+    color: mat.get-color-from-palette(theme.$accent); // optional hover effect
+  }
+}
+

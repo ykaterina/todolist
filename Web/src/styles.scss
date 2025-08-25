@@ -1,10 +1,13 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
+$primary: mat.define-palette(mat.$indigo-palette);
+$accent: mat.define-palette(mat.$pink-palette);
+
 @include mat.all-component-themes(mat.define-light-theme((
   color: (
-    primary: mat.define-palette(mat.$indigo-palette),
-    accent: mat.define-palette(mat.$pink-palette),
+    primary: $primary,
+    accent: $accent,
   )
 )));
 
@@ -15,4 +18,14 @@
 
 .ag-header-cell:hover .ag-header-cell-filter-button {
      opacity: 1;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    to right,
+    mat.get-color-from-palette($primary, 500),
+    mat.get-color-from-palette($accent, 500)
+  );
 }

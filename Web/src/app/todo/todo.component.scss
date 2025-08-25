@@ -1,17 +1,32 @@
+
+@use '@angular/material' as mat;
+@use '../../styles' as theme;
+
+.my-gradient-bg {
+  background: linear-gradient(
+    to right,
+    #3f51b5,
+    #ff4081
+  );
+}
+
 body {
      font-family: sans-serif;
 }
 
 .main {
-     max-width: 75%;
+     max-width: 85%;
      width: 75%;
-     margin: 2rem auto;
+     margin: 1rem auto;
      padding: 1rem;
      text-align: center;
-     box-shadow:
-       0 2px px 0 rgb(0 0 0 / 20%),
-       0 2.5rem 2rem 0 rgb(0 0 0 / 10%);
-       font-family: sans-serif;
+
+     .content {
+        background: rgba(221, 208, 208, 0.5);
+        padding: 2rem;
+        border-radius: 8px;
+        font-family: sans-serif;
+     }
    }
    
    @media screen and (min-width: 600px) {
@@ -24,48 +39,23 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-    
-    mat-form-field {
-      margin-top: 1rem;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
+  margin: auto 5%;
+
+  mat-form-field {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
      
 }
 
 .reset {
-  padding: 10px 10%;
+  padding: 10px 2.5%;
   display: flex;
   justify-content: flex-end;
+  
   #reset-btn {
     margin-right: 0;
-    font-size: 1rem;
+    font-size: 12px;
   }
 }
-
-//    .btn-wrapper {
-//      margin-bottom: 1rem;
-//    }
-   
-//    .btn-menu {
-//      flex-basis: 32%;
-//    }
-   
-//    ul {
-//      padding-inline-start: 0;
-//    }
-   
-//    ul li {
-//      list-style: none;
-//    }
-
-// p {
-//      text-align: right;
-// }
-
-// .btn-wrapper {
-//      display: flex;
-//      flex-wrap: nowrap;
-//      justify-content: space-between;
-// }
