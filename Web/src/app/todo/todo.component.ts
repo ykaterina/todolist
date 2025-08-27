@@ -30,6 +30,7 @@ export class TodoComponent {
      }
     this.todoService.addTodo(todo).subscribe({
       next: (response) => {
+        console.log(response);
         this.grid.setGridData();
       },
       error: (error) => {
